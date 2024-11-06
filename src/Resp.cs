@@ -27,7 +27,7 @@ namespace codecrafters_redis.src
 
         private static string ParseBulkString(ref string data)
         {
-            Console.WriteLine(data);
+            //Console.WriteLine(data);
             int n = int.Parse(data.Substring(1, data.IndexOf("\r\n") - 1));
             data = data.Substring(data.IndexOf("\r\n") + 2);
             //Console.WriteLine(data);

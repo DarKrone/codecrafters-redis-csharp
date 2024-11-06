@@ -10,7 +10,7 @@ namespace codecrafters_redis.src
 {
     internal class CommandHandler
     {
-        public static void HandleCommandArray(Socket socket,string[] commands)
+        public static void HandleCommandArray(Socket socket, string[] commands)
         {
             int pointer = 0;
             while (pointer < commands.Length)
@@ -31,12 +31,14 @@ namespace codecrafters_redis.src
         private static void EchoCommand(Socket socket, string echoText)
         {
             string msg = Resp.MakeBulkString(echoText);
+            Console.WriteLine($"Sending echo message - {msg}");
             socket.SendAsync(Encoding.UTF8.GetBytes(msg));
         }
 
         private static void PingCommand(Socket socket)
         {
             string msg = Resp.MakeSimpleString("PONG");
+            Console.WriteLine($"Sending pong message - {msg}");
             socket.SendAsync(Encoding.UTF8.GetBytes(msg));
         }
     }
