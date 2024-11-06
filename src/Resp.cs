@@ -11,7 +11,7 @@ namespace codecrafters_redis.src
         public static string[] ParseMessage(string data)
         {
             List<string> result = new List<string>();
-            Console.WriteLine(data);
+            Console.WriteLine(@data);
             int n = int.Parse(data.Substring(1, data.IndexOf(@"\r\n") - 1));
 
             //Console.WriteLine(n);
