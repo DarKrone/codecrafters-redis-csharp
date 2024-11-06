@@ -15,6 +15,7 @@ namespace codecrafters_redis.src
             int pointer = 0;
             while (pointer < commands.Length)
             {
+                Console.WriteLine(commands[pointer]);
                 switch (commands[pointer++])
                 {
                     case "ECHO":
