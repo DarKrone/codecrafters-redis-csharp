@@ -12,9 +12,11 @@ internal class Program
         // Uncomment this block to pass the first stage
         TcpListener server = new TcpListener(IPAddress.Any, 6379);
         server.Start();
-        for (int i = 0; i < 2; i++)
+        var clientSocket = server.AcceptSocket(); // wait for client
+        byte[] buffer = new byte[1024];
+        while(clientSocket.Connected)
         {
-            var clientSocket = server.AcceptSocket(); // wait for client
+            clientSocket.Receive(buffer);
             clientSocket.SendAsync(Encoding.UTF8.GetBytes("+PONG\r\n"));
         }
     }
