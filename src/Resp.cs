@@ -40,12 +40,12 @@ namespace codecrafters_redis.src
 
         public static string MakeBulkString(string data)
         {
-            return $"${data.ToString()?.Length}\\r\\n{data.ToString()}\\r\\n";
+            return $"${data.ToString()?.Length}\r\n{data.ToString()}\r\n";
         }
 
         public static string MakeSimpleString(string data)
         {
-            return $"+{data.ToString()}\\r\\n";
+            return $"+{data.ToString()}\r\n";
         }
     }
 }
