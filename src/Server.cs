@@ -1,5 +1,6 @@
 using System.Net;
 using System.Net.Sockets;
+using System.Text;
 
 internal class Program
 {
@@ -11,7 +12,8 @@ internal class Program
         // Uncomment this block to pass the first stage
         TcpListener server = new TcpListener(IPAddress.Any, 6379);
         server.Start();
-        server.AcceptSocket(); // wait for client
+        var clientSocket = server.AcceptSocket(); // wait for client
+        clientSocket.SendAsync(Encoding.UTF8.GetBytes("+PONG\r\n"));
     }
 }
 
