@@ -1,3 +1,4 @@
+using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -12,12 +13,22 @@ internal class Program
         // Uncomment this block to pass the first stage
         TcpListener server = new TcpListener(IPAddress.Any, 6379);
         server.Start();
-        var clientSocket = server.AcceptSocket(); // wait for client
-        byte[] buffer = new byte[1024];
-        while(clientSocket.Connected)
+
+        while(true)
         {
-            clientSocket.Receive(buffer);
-            clientSocket.SendAsync(Encoding.UTF8.GetBytes("+PONG\r\n"));
+            Socket clientSocket = server.AcceptSocket(); // wait for client
+            Thread connThread = new Thread(() => { HandleConnection(clientSocket); });
+            connThread.Start();
+        }
+    }
+
+    private static void HandleConnection(Socket socket)
+    {
+        byte[] buffer = new byte[1024];
+        while (socket.Connected)
+        {
+            socket.Receive(buffer);
+            socket.SendAsync(Encoding.UTF8.GetBytes("+PONG\r\n"));
         }
     }
 }
