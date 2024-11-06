@@ -1,3 +1,4 @@
+using codecrafters_redis.src;
 using System;
 using System.Net;
 using System.Net.Sockets;
@@ -14,7 +15,7 @@ internal class Program
         TcpListener server = new TcpListener(IPAddress.Any, 6379);
         server.Start();
 
-        while(true)
+        while (true)
         {
             Socket clientSocket = server.AcceptSocket(); // wait for client
             Thread connThread = new Thread(() => { HandleConnection(clientSocket); });
@@ -24,11 +25,18 @@ internal class Program
 
     private static void HandleConnection(Socket socket)
     {
-        byte[] buffer = new byte[1024];
+        byte[] buffer = new byte[socket.ReceiveBufferSize];
         while (socket.Connected)
         {
             socket.Receive(buffer);
-            socket.SendAsync(Encoding.UTF8.GetBytes("+PONG\r\n"));
+            string[] commands = Resp.ParseMessage(Encoding.UTF8.GetString(buffer));
+
+            foreach (string command in commands)
+            {
+                Console.WriteLine(command);
+            }
+
+            CommandHandler.HandleCommandArray(socket, commands);
         }
     }
 }
