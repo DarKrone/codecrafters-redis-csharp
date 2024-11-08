@@ -30,7 +30,7 @@ namespace codecrafters_redis.src
                             string value = commands[++pointer];
 
                             //check if SET getting PX argument
-                            if (commands[pointer + 1] == "px")
+                            if (pointer < commands.Length - 1 && commands[pointer + 1] == "px")
                             {
                                 pointer++;
                                 int px = int.Parse(commands[++pointer]); // in milliseconds
