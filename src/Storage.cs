@@ -24,6 +24,20 @@ namespace codecrafters_redis.src
             }
         }
 
+        public void AddToStorageWithExpiry(string key, string value, int expiry)
+        {
+            if (data.ContainsKey(key))
+            {
+                data[key] = value;
+            }
+            else
+            {
+                data.Add(key, value);
+            }
+            
+            Task.Delay(expiry).ContinueWith(t => { RemoveFromData(key); });
+        }
+
         public bool TryGetFromDataByKey(string key, out string value)
         {
             if (data.ContainsKey(key))
@@ -58,6 +72,12 @@ namespace codecrafters_redis.src
         public Dictionary<string, string> GetAllData()
         {
             return data;
+        }
+
+        private void ExpiryTimer(int expiry, string key)
+        {
+            Thread.Sleep(expiry);
+            RemoveFromData(key);
         }
     }
 }

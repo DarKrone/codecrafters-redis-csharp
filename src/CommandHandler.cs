@@ -28,7 +28,18 @@ namespace codecrafters_redis.src
                         {
                             string key = commands[++pointer];
                             string value = commands[++pointer];
-                            SetCommand(socket, key, value);
+
+                            //check if SET getting PX argument
+                            if (commands[pointer + 1] == "px")
+                            {
+                                pointer++;
+                                int px = int.Parse(commands[++pointer]); // in milliseconds
+                                SetCommand(socket, key, value, px);
+                            }
+                            else
+                            {
+                                SetCommand(socket, key, value);
+                            }
                         }
                         break;
                     case "GET":
@@ -56,10 +67,18 @@ namespace codecrafters_redis.src
             socket.SendAsync(Encoding.UTF8.GetBytes(msg));
         }
 
-        private static void SetCommand(Socket socket, string key, string value)
+        private static void SetCommand(Socket socket, string key, string value, int px = -1)
         {
-            Storage.Instance.AddToData(key, value);
-            Console.WriteLine($"Set key - {key} with value - {value}");
+            if (px > 0)
+            {
+                Storage.Instance.AddToStorageWithExpiry(key, value, px);
+                Console.WriteLine($"Set key - {key} with value - {value}, px - {px}");
+            }
+            else
+            {
+                Storage.Instance.AddToData(key, value);
+                Console.WriteLine($"Set key - {key} with value - {value}");
+            }
 
             string msg = Resp.MakeSimpleString("OK");
             Console.WriteLine($"Sending OK message - {msg}");
