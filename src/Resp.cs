@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace codecrafters_redis.src
 {
@@ -43,9 +44,15 @@ namespace codecrafters_redis.src
             return $"${data.ToString()?.Length}\r\n{data.ToString()}\r\n";
         }
 
+        public static string MakeNullBulkString()
+        {
+            return "$-1\r\n";
+        }
+
         public static string MakeSimpleString(string data)
         {
             return $"+{data.ToString()}\r\n";
         }
+
     }
 }

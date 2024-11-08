@@ -19,11 +19,23 @@ namespace codecrafters_redis.src
                 switch (commands[pointer])
                 {
                     case "ECHO":
-                        pointer++;
-                        EchoCommand(socket ,commands[pointer]);
+                        EchoCommand(socket, commands[++pointer]);
                         break;
                     case "PING":
                         PingCommand(socket);
+                        break;
+                    case "SET":
+                        {
+                            string key = commands[++pointer];
+                            string value = commands[++pointer];
+                            SetCommand(socket, key, value);
+                        }
+                        break;
+                    case "GET":
+                        {
+                            string key = commands[++pointer];
+                            GetCommand(socket, key);
+                        }
                         break;
                 }
                 pointer++;
@@ -42,6 +54,32 @@ namespace codecrafters_redis.src
             string msg = Resp.MakeSimpleString("PONG");
             Console.WriteLine($"Sending pong message - {msg}");
             socket.SendAsync(Encoding.UTF8.GetBytes(msg));
+        }
+
+        private static void SetCommand(Socket socket, string key, string value)
+        {
+            Storage.Instance.AddToData(key, value);
+            Console.WriteLine($"Set key - {key} with value - {value}");
+
+            string msg = Resp.MakeSimpleString("OK");
+            Console.WriteLine($"Sending OK message - {msg}");
+            socket.SendAsync(Encoding.UTF8.GetBytes(msg));
+        }
+
+        private static void GetCommand(Socket socket, string key)
+        {
+            if (Storage.Instance.TryGetFromDataByKey(key, out string value))
+            { 
+                string msg = Resp.MakeBulkString(value);
+                Console.WriteLine($"Sending value message - {msg}");
+                socket.SendAsync(Encoding.UTF8.GetBytes(msg));
+            }
+            else
+            {
+                string msg = Resp.MakeNullBulkString();
+                Console.WriteLine($"Sending null value message - {msg}");
+                socket.SendAsync(Encoding.UTF8.GetBytes(msg));
+            }
         }
     }
 }
