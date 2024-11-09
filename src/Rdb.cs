@@ -28,6 +28,8 @@ namespace codecrafters_redis.src
             using (StreamReader reader = new StreamReader($"{config["dir"]}/{config["dbfilename"]}"))
             {
                 string text = await reader.ReadToEndAsync();
+                byte[] bstring = Encoding.UTF8.GetBytes(text);
+                string hexString = BitConverter.ToString(bstring);
                 Console.WriteLine(text);
             }
         }
