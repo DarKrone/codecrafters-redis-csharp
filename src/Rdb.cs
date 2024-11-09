@@ -22,5 +22,14 @@ namespace codecrafters_redis.src
         {
             config[key] = value;
         }
+
+        public async void ReadDb()
+        {
+            using (StreamReader reader = new StreamReader($"{config["dir"]}/{config["dbfilename"]}"))
+            {
+                string text = await reader.ReadToEndAsync();
+                Console.WriteLine(text);
+            }
+        }
     }
 }
