@@ -54,5 +54,14 @@ namespace codecrafters_redis.src
             return $"+{data.ToString()}\r\n";
         }
 
+        public static string MakeArray(string[] data)
+        {
+            string msg = $"*{data.Length}\r\n";
+            foreach (string str in data)
+            {
+                msg += MakeBulkString(str);
+            }
+            return msg;
+        }
     }
 }

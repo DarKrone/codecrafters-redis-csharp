@@ -10,7 +10,7 @@ namespace codecrafters_redis.src
     {
         public static readonly Storage Instance = new Storage();
 
-        private Dictionary<string, string> data = new Dictionary<string, string>();
+        private Dictionary<string, string> data = new Dictionary<string, string>(); // Maybe need to use MemoryCache
 
         public void AddToData(string key, string value)
         {
@@ -26,15 +26,8 @@ namespace codecrafters_redis.src
 
         public void AddToStorageWithExpiry(string key, string value, int expiry)
         {
-            if (data.ContainsKey(key))
-            {
-                data[key] = value;
-            }
-            else
-            {
-                data.Add(key, value);
-            }
-            
+            AddToData(key, value);
+
             Task.Delay(expiry).ContinueWith(t => { RemoveFromData(key); });
         }
 

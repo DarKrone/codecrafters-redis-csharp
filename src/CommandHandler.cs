@@ -48,6 +48,14 @@ namespace codecrafters_redis.src
                             GetCommand(socket, key);
                         }
                         break;
+                    case "CONFIG":
+                        if (commands[pointer + 1] == "GET")
+                        {
+                            pointer++;
+                            string key = commands[++pointer];
+                            ConfigGetCommand(socket, key);
+                        }
+                        break;
                 }
                 pointer++;
             }
@@ -99,6 +107,14 @@ namespace codecrafters_redis.src
                 Console.WriteLine($"Sending null value message - {msg}");
                 socket.SendAsync(Encoding.UTF8.GetBytes(msg));
             }
+        }
+
+        private static void ConfigGetCommand(Socket socket, string key)
+        {
+            string value = Rdb.Instance.GetConfigValueByKey(key);
+            string msg = Resp.MakeArray(new string[] { key, value });
+            Console.WriteLine($"Sending config value message - {msg}");
+            socket.SendAsync (Encoding.UTF8.GetBytes(msg));
         }
     }
 }
