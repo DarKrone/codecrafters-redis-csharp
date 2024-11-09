@@ -8,10 +8,12 @@ internal class Program
 {
     private static void Main(string[] args)
     {
-        // You can use print statements as follows for debugging, they'll be visible when running tests.
-        //Console.WriteLine("Logs from your program will appear here!");
+        //Config settings
+        for (int i = 0; i < args.Length; i += 2)
+        {
+            Rdb.Instance.SetConfig(args[i].Substring(2), args[i + 1]);
+        }
 
-        // Uncomment this block to pass the first stage
         TcpListener server = new TcpListener(IPAddress.Any, 6379);
         server.Start();
 

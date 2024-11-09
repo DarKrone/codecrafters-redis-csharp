@@ -11,15 +11,16 @@ namespace codecrafters_redis.src
     {
         public static readonly Rdb Instance = new Rdb();
 
-        private Dictionary<string, string> config = new Dictionary<string, string>()
-        {
-            ["dir"] = "/tmp/redis-files",
-            ["dbfilename"] = "dump.rdb",
-        };
+        private Dictionary<string, string> config = new Dictionary<string, string>();
 
         public string GetConfigValueByKey(string key)
         {
             return config[key];
+        }
+
+        public void SetConfig(string key, string value)
+        {
+            config[key] = value;
         }
     }
 }
