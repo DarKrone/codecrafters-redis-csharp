@@ -13,6 +13,7 @@ internal class Program
         {
             Rdb.Instance.SetConfig(args[i].Substring(2), args[i + 1]);
         }
+        Rdb.Instance.ReadDb();
 
         TcpListener server = new TcpListener(IPAddress.Any, 6379);
         server.Start();
