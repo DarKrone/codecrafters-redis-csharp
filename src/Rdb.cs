@@ -29,7 +29,7 @@ namespace codecrafters_redis.src
             {
                 string text = await reader.ReadToEndAsync();
                 byte[] bstring = Encoding.UTF8.GetBytes(text);
-                string hexString = BitConverter.ToString(bstring);
+                string hexString = Convert.ToHexString(bstring);
                 Console.WriteLine(text);
             }
         }
