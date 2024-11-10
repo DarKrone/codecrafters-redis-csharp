@@ -33,7 +33,7 @@ namespace codecrafters_redis.src
                             if (pointer < commands.Length - 1 && commands[pointer + 1] == "px")
                             {
                                 pointer++;
-                                int px = int.Parse(commands[++pointer]); // in milliseconds
+                                ulong px = ulong.Parse(commands[++pointer]); // in milliseconds
                                 SetCommand(socket, key, value, px);
                             }
                             else
@@ -81,7 +81,7 @@ namespace codecrafters_redis.src
             socket.SendAsync(Encoding.UTF8.GetBytes(msg));
         }
 
-        private static void SetCommand(Socket socket, string key, string value, int px = -1)
+        private static void SetCommand(Socket socket, string key, string value, ulong px = 0)
         {
             if (px > 0)
             {

@@ -1,6 +1,9 @@
-﻿using System;
+﻿using Microsoft.Extensions.Caching.Memory;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -10,32 +13,24 @@ namespace codecrafters_redis.src
     {
         public static readonly Storage Instance = new Storage();
 
-        private Dictionary<string, string> data = new Dictionary<string, string>(); // Maybe need to use MemoryCache
+        private MemoryCache cache = new MemoryCache(new MemoryCacheOptions());
 
         public void AddToData(string key, string value)
         {
-            if (data.ContainsKey(key))
-            {
-                data[key] = value;
-            }
-            else
-            {
-                data.Add(key, value);
-            }
+            cache.Set(key, value);
         }
 
-        public void AddToStorageWithExpiry(string key, string value, int expiry)
+        public void AddToStorageWithExpiry(string key, string value, ulong expiry)
         {
-            AddToData(key, value);
-
-            Task.Delay(expiry).ContinueWith(t => { RemoveFromData(key); });
+            cache.Set(key, value, DateTimeOffset.Now.AddMilliseconds(expiry));
         }
 
         public bool TryGetFromDataByKey(string key, out string value)
         {
-            if (data.ContainsKey(key))
+            string? result;
+            if (cache.TryGetValue(key, out result))
             {
-                value = data[key];
+                value = result!;
                 return true;
             }
             else
@@ -47,35 +42,27 @@ namespace codecrafters_redis.src
 
         public void RemoveFromData(string key)
         {
-            if (!data.ContainsKey(key))
-            {
-                return;
-            }
-            else
-            {
-                data.Remove(key);
-            }
+            cache.Remove(key);
         }
 
         public void ClearAllData()
         {
-            data.Clear();
-        }
-
-        public Dictionary<string, string> GetAllData()
-        {
-            return data;
-        }
-
-        private void ExpiryTimer(int expiry, string key)
-        {
-            Thread.Sleep(expiry);
-            RemoveFromData(key);
+            cache.Clear();
         }
 
         public string[] GetAllKeys()
         {
-            return data.Keys.ToArray();
+            var field = typeof(MemoryCache).GetProperty("EntriesCollection", BindingFlags.NonPublic | BindingFlags.Instance);
+            var collection = field!.GetValue(cache) as ICollection;
+            var items = new List<string>();
+            if (collection != null)
+            foreach (var item in collection)
+            {
+                var methodInfo = item.GetType().GetProperty("Key");
+                var val = methodInfo!.GetValue(item);
+                items.Add(val!.ToString()!);
+            }
+            return items.ToArray();
         }
     }
 }

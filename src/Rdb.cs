@@ -54,7 +54,7 @@ namespace codecrafters_redis.src
                     case "FC":
                         {
                             dbHexString = dbHexString[2..];
-                            int milliseconds = Int32.Parse(dbHexString.Substring(0, 16), System.Globalization.NumberStyles.HexNumber);
+                            ulong milliseconds = ulong.Parse(dbHexString.Substring(0, 16), System.Globalization.NumberStyles.HexNumber);
                             dbHexString = dbHexString[16..];
                             ReadKeyValue(ref dbHexString, milliseconds);
                             break;
@@ -62,7 +62,7 @@ namespace codecrafters_redis.src
                     case "FD":
                         {
                             dbHexString = dbHexString[2..];
-                            int milliseconds = Int32.Parse(dbHexString.Substring(0, 8), System.Globalization.NumberStyles.HexNumber);
+                            ulong milliseconds = ulong.Parse(dbHexString.Substring(0, 8), System.Globalization.NumberStyles.HexNumber);
                             dbHexString = dbHexString[8..];
                             ReadKeyValue(ref dbHexString, milliseconds);
                             break;
@@ -71,7 +71,7 @@ namespace codecrafters_redis.src
             }
         }
  
-        private void ReadKeyValue(ref string dbHexString, int milliseconds = -1)
+        private void ReadKeyValue(ref string dbHexString, ulong milliseconds = 0)
         {
             dbHexString = dbHexString[2..];
             int length = Convert.ToInt32($"0x{dbHexString.Substring(0, 2)}", 16);
