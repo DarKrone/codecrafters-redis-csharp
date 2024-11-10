@@ -54,20 +54,17 @@ namespace codecrafters_redis.src
                         break;
                     case "FC":
                         {
-                            Console.WriteLine(dbHexString);
                             dbHexString = dbHexString[2..];
                             int milliseconds = Int32.Parse(dbHexString.Substring(0, 8), System.Globalization.NumberStyles.HexNumber);
-                            dbHexString = dbHexString[8..];
-                            Console.WriteLine(dbHexString);
+                            dbHexString = dbHexString[16..];
                             ReadKeyValue(ref dbHexString, milliseconds);
-                            Console.WriteLine(dbHexString);
                             break;
                         }
                     case "FD":
                         {
                             dbHexString = dbHexString[2..];
                             int milliseconds = Int32.Parse(dbHexString.Substring(0, 4), System.Globalization.NumberStyles.HexNumber);
-                            dbHexString = dbHexString[4..];
+                            dbHexString = dbHexString[8..];
                             ReadKeyValue(ref dbHexString, milliseconds);
                             break;
                         }
