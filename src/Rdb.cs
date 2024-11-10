@@ -44,7 +44,7 @@ namespace codecrafters_redis.src
                 hexString = BitConverter.ToString(buffer).Replace("-", "");
             }
 
-            int n = Convert.ToInt32(hexString.Substring(hexString.IndexOf("FB") + 2, 2), 16); //size of table
+            int n = Convert.ToInt32($"0x{hexString.Substring(hexString.IndexOf("FB") + 2, 2)}", 16); //size of table
 
             string dbHexString = hexString[(hexString.IndexOf("FB") + 6)..];
             for (int i = 0; i < n; i++)
@@ -54,11 +54,11 @@ namespace codecrafters_redis.src
                 {
                     case "00":
                         dbHexString = dbHexString[2..];
-                        int length = Convert.ToInt32(FromHexToString(dbHexString.Substring(0, 2)), 16);
+                        int length = Convert.ToInt32($"0x{FromHexToString(dbHexString.Substring(0, 2))}", 16);
                         dbHexString = dbHexString[2..];
                         string key = FromHexToString(dbHexString.Substring(0, length * 2));
                         dbHexString = dbHexString[(length * 2)..];
-                        length = Convert.ToInt32(FromHexToString(dbHexString.Substring(0, 2)), 16);
+                        length = Convert.ToInt32($"0x{FromHexToString(dbHexString.Substring(0, 2))}", 16);
                         dbHexString = dbHexString[2..];
                         string value = FromHexToString(dbHexString.Substring(0, length * 2));
                         dbHexString = dbHexString[(length * 2)..];
