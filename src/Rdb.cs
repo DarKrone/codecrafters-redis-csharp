@@ -42,12 +42,9 @@ namespace codecrafters_redis.src
                 byte[] buffer = new byte[fstream.Length];
                 fstream.Read(buffer, 0, buffer.Length);
                 hexString = BitConverter.ToString(buffer).Replace("-", "");
-                Console.WriteLine(hexString);
             }
 
-            Console.WriteLine(FromHexToString(hexString.Substring(hexString.IndexOf("FB") + 2, 2)));
-
-            int n = int.Parse(FromHexToString(hexString.Substring(hexString.IndexOf("FB") + 2, 2))); //size of table
+            int n = Convert.ToInt32(hexString.Substring(hexString.IndexOf("FB") + 2, 2), 16); //size of table
 
             string dbHexString = hexString[(hexString.IndexOf("FB") + 6)..];
             for (int i = 0; i < n; i++)
@@ -80,11 +77,8 @@ namespace codecrafters_redis.src
             byte[] raw = new byte[hexString.Length / 2];
             for(int i = 0; i < raw.Length; i++)
             {
-                Console.WriteLine(hexString.Substring(i * 2, 2));
                 raw[i] = Convert.ToByte(hexString.Substring(i * 2, 2), 16);
             }
-            Console.WriteLine(raw[0]);
-            Console.WriteLine(Encoding.UTF8.GetString(raw));
             return Encoding.UTF8.GetString(raw);
         }
     }
