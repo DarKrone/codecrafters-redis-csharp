@@ -25,11 +25,15 @@ namespace codecrafters_redis.src
 
         public void ReadDb()
         {
-            string hexString;
+            if (!config.ContainsKey("dir") && !config.ContainsKey("dbfilename"))
+            {
+                return;
+            }
             if (!File.Exists($"{config["dir"]}/{config["dbfilename"]}"))
             {
                 return;
             }
+            string hexString;
             using (FileStream fstream = File.OpenRead($"{config["dir"]}/{config["dbfilename"]}"))
             {
                 byte[] buffer = new byte[fstream.Length];
