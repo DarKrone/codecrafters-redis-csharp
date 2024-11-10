@@ -41,8 +41,8 @@ namespace codecrafters_redis.src
              //79-CF-C9-00-1A-09-2C-CB-0A
                 byte[] buffer = new byte[fstream.Length];
                 fstream.Read(buffer, 0, buffer.Length);
-                Console.WriteLine(BitConverter.ToString(buffer));
                 hexString = BitConverter.ToString(buffer).Replace("-", "");
+                Console.WriteLine(hexString);
             }
 
             int n = int.Parse(FromHexToString(hexString.Substring(hexString.IndexOf("FB") + 2, 2))); //size of table
