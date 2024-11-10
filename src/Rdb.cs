@@ -26,19 +26,12 @@ namespace codecrafters_redis.src
         public void ReadDb()
         {
             string hexString;
+            if (!File.Exists($"{config["dir"]}/{config["dbfilename"]}"))
+            {
+                return;
+            }
             using (FileStream fstream = File.OpenRead($"{config["dir"]}/{config["dbfilename"]}"))
-            {//52-45-44-49-53-30-30-31-31-
-             //FA-
-             //0A-72-65-64-69-73-2D-62-69-74-73-C0-40-FA-09-72-65-64-69-73-2D-76-65-72-05-37-2E-32-2E-30-
-             //FE-00-
-             //FB-
-             //01-
-             //00-
-             //00-
-             //09-70-69-6E-65-61-70-70-6C-65-
-             //0A-73-74-72-61-77-62-65-72-72-79-
-             //FF-
-             //79-CF-C9-00-1A-09-2C-CB-0A
+            {
                 byte[] buffer = new byte[fstream.Length];
                 fstream.Read(buffer, 0, buffer.Length);
                 hexString = BitConverter.ToString(buffer).Replace("-", "");
