@@ -89,6 +89,7 @@ namespace codecrafters_redis.src
 
             Console.WriteLine(key);
             Console.WriteLine(value);
+            Console.WriteLine(milliseconds);
 
             if (milliseconds > 0)
             {

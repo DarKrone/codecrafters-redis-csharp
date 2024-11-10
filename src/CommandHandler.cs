@@ -56,6 +56,12 @@ namespace codecrafters_redis.src
                             ConfigGetCommand(socket, key);
                         }
                         break;
+                    case "KEYS":
+                        if (commands[++pointer] == "*")
+                        {
+                            KeysCommand(socket);
+                        }
+                        break;
                 }
                 pointer++;
             }
@@ -114,7 +120,15 @@ namespace codecrafters_redis.src
             string value = Rdb.Instance.GetConfigValueByKey(key);
             string msg = Resp.MakeArray(new string[] { key, value });
             Console.WriteLine($"Sending config value message - {msg}");
-            socket.SendAsync (Encoding.UTF8.GetBytes(msg));
+            socket.SendAsync(Encoding.UTF8.GetBytes(msg));
+        }
+
+        private static void KeysCommand(Socket socket)
+        {
+            string[] keys = Storage.Instance.GetAllKeys();
+            string msg = Resp.MakeArray(keys);
+            Console.WriteLine("Sending all keys from data");
+            socket.SendAsync(Encoding.UTF8.GetBytes(msg));
         }
     }
 }

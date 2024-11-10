@@ -72,5 +72,10 @@ namespace codecrafters_redis.src
             Thread.Sleep(expiry);
             RemoveFromData(key);
         }
+
+        public string[] GetAllKeys()
+        {
+            return data.Keys.ToArray();
+        }
     }
 }
