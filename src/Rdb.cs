@@ -38,9 +38,9 @@ namespace codecrafters_redis.src
             {
                 byte[] buffer = new byte[fstream.Length];
                 fstream.Read(buffer, 0, buffer.Length);
+                Console.WriteLine(BitConverter.ToString(buffer));
                 hexString = BitConverter.ToString(buffer).Replace("-", "");
             }
-            Console.WriteLine(hexString);
             int n = Convert.ToInt32($"0x{hexString.Substring(hexString.IndexOf("FB") + 2, 2)}", 16); //size of table
             Console.WriteLine(n);
             string dbHexString = hexString[(hexString.IndexOf("FB") + 6)..];
