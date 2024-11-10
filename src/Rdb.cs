@@ -54,11 +54,11 @@ namespace codecrafters_redis.src
                 {
                     case "00":
                         dbHexString = dbHexString[2..];
-                        int length = int.Parse(FromHexToString(dbHexString.Substring(0, 2)));
+                        int length = Convert.ToInt32(FromHexToString(dbHexString.Substring(0, 2)), 16);
                         dbHexString = dbHexString[2..];
                         string key = FromHexToString(dbHexString.Substring(0, length * 2));
                         dbHexString = dbHexString[(length * 2)..];
-                        length = int.Parse(FromHexToString(dbHexString.Substring(0, 2)));
+                        length = Convert.ToInt32(FromHexToString(dbHexString.Substring(0, 2)), 16);
                         dbHexString = dbHexString[2..];
                         string value = FromHexToString(dbHexString.Substring(0, length * 2));
                         dbHexString = dbHexString[(length * 2)..];
