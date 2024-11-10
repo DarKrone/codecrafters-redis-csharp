@@ -84,7 +84,7 @@ namespace codecrafters_redis.src
                 raw[i] = Convert.ToByte(hexString.Substring(i * 2, 2), 16);
             }
             Console.WriteLine(raw[0]);
-
+            Console.WriteLine(Encoding.UTF8.GetString(raw));
             return Encoding.UTF8.GetString(raw);
         }
     }
