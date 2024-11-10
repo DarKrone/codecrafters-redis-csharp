@@ -45,6 +45,7 @@ namespace codecrafters_redis.src
                 Console.WriteLine(hexString);
             }
 
+            Console.WriteLine(hexString.Substring(hexString.IndexOf("FB") + 2, 2));
             int n = int.Parse(FromHexToString(hexString.Substring(hexString.IndexOf("FB") + 2, 2))); //size of table
 
             string dbHexString = hexString[(hexString.IndexOf("FB") + 6)..];
