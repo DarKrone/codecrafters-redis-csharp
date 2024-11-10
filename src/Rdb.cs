@@ -50,28 +50,24 @@ namespace codecrafters_redis.src
                 switch (indicator)
                 {
                     case "00":
-                        Console.WriteLine(dbHexString);
                         ReadKeyValue(ref dbHexString);
-                        Console.WriteLine(dbHexString);
                         break;
                     case "FC":
                         {
-                            Console.WriteLine(dbHexString);
                             dbHexString = dbHexString[2..];
                             int milliseconds = Int32.Parse(dbHexString.Substring(0, 8), System.Globalization.NumberStyles.HexNumber);
                             dbHexString = dbHexString[8..];
+                            Console.WriteLine(dbHexString);
                             ReadKeyValue(ref dbHexString, milliseconds);
                             Console.WriteLine(dbHexString);
                             break;
                         }
                     case "FD":
                         {
-                            Console.WriteLine(dbHexString);
                             dbHexString = dbHexString[2..];
                             int milliseconds = Int32.Parse(dbHexString.Substring(0, 4), System.Globalization.NumberStyles.HexNumber);
                             dbHexString = dbHexString[4..];
                             ReadKeyValue(ref dbHexString, milliseconds);
-                            Console.WriteLine(dbHexString);
                             break;
                         }
                 }
