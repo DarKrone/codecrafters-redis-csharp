@@ -53,22 +53,50 @@ namespace codecrafters_redis.src
                 switch (indicator)
                 {
                     case "00":
-                        dbHexString = dbHexString[2..];
-                        int length = Convert.ToInt32($"0x{dbHexString.Substring(0, 2)}", 16);
-                        dbHexString = dbHexString[2..];
-                        string key = FromHexToString(dbHexString.Substring(0, length * 2));
-                        dbHexString = dbHexString[(length * 2)..];
-                        length = Convert.ToInt32($"0x{dbHexString.Substring(0, 2)}", 16);
-                        dbHexString = dbHexString[2..];
-                        string value = FromHexToString(dbHexString.Substring(0, length * 2));
-                        dbHexString = dbHexString[(length * 2)..];
-
-                        Console.WriteLine(key);
-                        Console.WriteLine(value);
-
-                        Storage.Instance.AddToData(key, value);
+                        ReadKeyValue(ref dbHexString);
                         break;
+                    case "FC":
+                        {
+                            dbHexString = dbHexString[2..];
+                            int milliseconds = Int32.Parse(dbHexString.Substring(0, 8), System.Globalization.NumberStyles.HexNumber);
+                            dbHexString = dbHexString[8..];
+                            ReadKeyValue(ref dbHexString, milliseconds);
+                            break;
+                        }
+                    case "FD":
+                        {
+                            dbHexString = dbHexString[2..];
+                            int milliseconds = Int32.Parse(dbHexString.Substring(0, 4), System.Globalization.NumberStyles.HexNumber);
+                            dbHexString = dbHexString[4..];
+                            ReadKeyValue(ref dbHexString, milliseconds);
+                            break;
+                        }
                 }
+            }
+        }
+
+        private void ReadKeyValue(ref string dbHexString, int milliseconds = -1)
+        {
+            dbHexString = dbHexString[2..];
+            int length = Convert.ToInt32($"0x{dbHexString.Substring(0, 2)}", 16);
+            dbHexString = dbHexString[2..];
+            string key = FromHexToString(dbHexString.Substring(0, length * 2));
+            dbHexString = dbHexString[(length * 2)..];
+            length = Convert.ToInt32($"0x{dbHexString.Substring(0, 2)}", 16);
+            dbHexString = dbHexString[2..];
+            string value = FromHexToString(dbHexString.Substring(0, length * 2));
+            dbHexString = dbHexString[(length * 2)..];
+
+            Console.WriteLine(key);
+            Console.WriteLine(value);
+
+            if (milliseconds > 0)
+            {
+                Storage.Instance.AddToStorageWithExpiry(key, value, milliseconds);
+            }
+            else
+            {
+                Storage.Instance.AddToData(key, value);
             }
         }
 
