@@ -46,6 +46,7 @@ namespace codecrafters_redis.src
             }
 
             Console.WriteLine(FromHexToString(hexString.Substring(hexString.IndexOf("FB") + 2, 2)));
+
             int n = int.Parse(FromHexToString(hexString.Substring(hexString.IndexOf("FB") + 2, 2))); //size of table
 
             string dbHexString = hexString[(hexString.IndexOf("FB") + 6)..];
@@ -79,8 +80,11 @@ namespace codecrafters_redis.src
             byte[] raw = new byte[hexString.Length / 2];
             for(int i = 0; i < raw.Length; i++)
             {
+                Console.WriteLine(hexString.Substring(i * 2, 2));
                 raw[i] = Convert.ToByte(hexString.Substring(i * 2, 2), 16);
             }
+            Console.WriteLine(raw[0]);
+
             return Encoding.UTF8.GetString(raw);
         }
     }
