@@ -59,17 +59,7 @@ namespace codecrafters_redis.src
 
         public string[] GetAllKeys()
         {
-            var field = typeof(MemoryCache).GetProperty("EntriesCollection", BindingFlags.NonPublic | BindingFlags.Instance);
-            var collection = field!.GetValue(cache) as ICollection;
-            var items = new List<string>();
-            if (collection != null)
-            foreach (var item in collection)
-            {
-                var methodInfo = item.GetType().GetProperty("Key");
-                var val = methodInfo!.GetValue(item);
-                items.Add(val!.ToString()!);
-            }
-            return items.ToArray();
+            return (string[])cache.Keys.ToArray();
         }
     }
 }
