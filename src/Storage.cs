@@ -59,7 +59,7 @@ namespace codecrafters_redis.src
 
         public string[] GetAllKeys()
         {
-            return (string[])cache.Keys.ToArray();
+            return (string[])cache.Keys.ToArray(); // need to rebuild project to gey Keys property
         }
     }
 }
