@@ -54,7 +54,11 @@ namespace codecrafters_redis.src
                     case "FC":
                         {
                             dbHexString = dbHexString[2..];
-                            ulong milliseconds = ulong.Parse(dbHexString.Substring(0, 16), System.Globalization.NumberStyles.HexNumber);
+                            string hexSeconds = dbHexString.Substring(0, 16);
+                            char[] charHexArray = hexSeconds.ToCharArray();
+                            Array.Reverse(charHexArray);
+                            hexSeconds = new string(charHexArray);
+                            ulong milliseconds = ulong.Parse(hexSeconds, System.Globalization.NumberStyles.HexNumber);
                             dbHexString = dbHexString[16..];
                             ReadKeyValue(ref dbHexString, milliseconds);
                             break;
@@ -62,7 +66,11 @@ namespace codecrafters_redis.src
                     case "FD":
                         {
                             dbHexString = dbHexString[2..];
-                            ulong milliseconds = ulong.Parse(dbHexString.Substring(0, 8), System.Globalization.NumberStyles.HexNumber);
+                            string hexSeconds = dbHexString.Substring(0, 8);
+                            char[] charHexArray = hexSeconds.ToCharArray();
+                            Array.Reverse(charHexArray);
+                            hexSeconds = new string(charHexArray);
+                            ulong milliseconds = ulong.Parse(hexSeconds, System.Globalization.NumberStyles.HexNumber);
                             dbHexString = dbHexString[8..];
                             ReadKeyValue(ref dbHexString, milliseconds);
                             break;
