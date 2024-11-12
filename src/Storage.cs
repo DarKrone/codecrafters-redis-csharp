@@ -22,7 +22,9 @@ namespace codecrafters_redis.src
 
         public void AddToStorageWithExpiryTimeStamp(string key, string value, ulong expiry)
         {
-            cache.Set(key, value, new DateTime((long)expiry * TimeSpan.TicksPerMillisecond));
+            DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+            dateTime = dateTime.AddMilliseconds(1640995200000);
+            cache.Set(key, value, dateTime);
         }
 
         public void AddToStorageWithExpiryMilliseconds(string key, string value, ulong expiry)
