@@ -85,7 +85,7 @@ namespace codecrafters_redis.src
         {
             if (px > 0)
             {
-                Storage.Instance.AddToStorageWithExpiry(key, value, px);
+                Storage.Instance.AddToStorageWithExpiryMilliseconds(key, value, px);
                 Console.WriteLine($"Set key - {key} with value - {value}, px - {px}");
             }
             else

@@ -20,9 +20,14 @@ namespace codecrafters_redis.src
             cache.Set(key, value);
         }
 
-        public void AddToStorageWithExpiry(string key, string value, ulong expiry)
+        public void AddToStorageWithExpiryTimeStamp(string key, string value, ulong expiry)
         {
-            cache.Set(key, value, DateTimeOffset.Now.AddMilliseconds(expiry));
+            cache.Set(key, value, new DateTime((long)expiry * TimeSpan.TicksPerMillisecond));
+        }
+
+        public void AddToStorageWithExpiryMilliseconds(string key, string value, ulong expiry)
+        {
+            cache.Set(key, value, DateTime.Now.AddMilliseconds(expiry));
         }
 
         public bool TryGetFromDataByKey(string key, out string value)

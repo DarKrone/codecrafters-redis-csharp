@@ -44,7 +44,7 @@ namespace codecrafters_redis.src
             int tableSize = Convert.ToInt32($"0x{hexString.Substring(hexString.IndexOf("FB") + 2, 2)}", 16); //size of table
             Console.WriteLine($"Table size - {tableSize}");
             int expiryTableSize = Convert.ToInt32($"0x{hexString.Substring(hexString.IndexOf("FB") + 4, 2)}", 16); //size of expiry table
-            Console.WriteLine($"Table size - {expiryTableSize}");
+            Console.WriteLine($"Table expiry size - {expiryTableSize}");
 
             string dbHexString = hexString[(hexString.IndexOf("FB") + 6)..];
             for (int i = 0; i < tableSize; i++)
@@ -109,7 +109,7 @@ namespace codecrafters_redis.src
 
             if (milliseconds > 0)
             {
-                Storage.Instance.AddToStorageWithExpiry(key, value, milliseconds);
+                Storage.Instance.AddToStorageWithExpiryTimeStamp(key, value, milliseconds);
             }
             else
             {
