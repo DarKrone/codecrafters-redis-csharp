@@ -40,10 +40,14 @@ namespace codecrafters_redis.src
                 fstream.Read(buffer, 0, buffer.Length);
                 hexString = BitConverter.ToString(buffer).Replace("-", "");
             }
-            int n = Convert.ToInt32($"0x{hexString.Substring(hexString.IndexOf("FB") + 2, 2)}", 16); //size of table
-            Console.WriteLine(n);
+
+            int tableSize = Convert.ToInt32($"0x{hexString.Substring(hexString.IndexOf("FB") + 2, 2)}", 16); //size of table
+            Console.WriteLine($"Table size - {tableSize}");
+            int expiryTableSize = Convert.ToInt32($"0x{hexString.Substring(hexString.IndexOf("FB") + 4, 2)}", 16); //size of expiry table
+            Console.WriteLine($"Table size - {expiryTableSize}");
+
             string dbHexString = hexString[(hexString.IndexOf("FB") + 6)..];
-            for (int i = 0; i < n; i++)
+            for (int i = 0; i < tableSize; i++)
             {
                 string indicator = dbHexString.Substring(0, 2);
                 switch (indicator)
@@ -99,9 +103,9 @@ namespace codecrafters_redis.src
             string value = FromHexToString(dbHexString.Substring(0, length * 2));
             dbHexString = dbHexString[(length * 2)..];
 
-            Console.WriteLine(key);
-            Console.WriteLine(value);
-            Console.WriteLine(milliseconds);
+            Console.WriteLine($"Key - {key}");
+            Console.WriteLine($"Value - {value}");
+            Console.WriteLine($"Expiry - {milliseconds}");
 
             if (milliseconds > 0)
             {
