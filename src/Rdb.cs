@@ -55,9 +55,7 @@ namespace codecrafters_redis.src
                         {
                             dbHexString = dbHexString[2..];
                             string hexSeconds = dbHexString.Substring(0, 16);
-                            char[] charHexArray = hexSeconds.ToCharArray();
-                            Array.Reverse(charHexArray);
-                            hexSeconds = new string(charHexArray);
+                            hexSeconds = BigEndToLitEndHex(hexSeconds);
                             ulong milliseconds = ulong.Parse(hexSeconds, System.Globalization.NumberStyles.HexNumber);
                             dbHexString = dbHexString[16..];
                             ReadKeyValue(ref dbHexString, milliseconds);
@@ -67,9 +65,7 @@ namespace codecrafters_redis.src
                         {
                             dbHexString = dbHexString[2..];
                             string hexSeconds = dbHexString.Substring(0, 8);
-                            char[] charHexArray = hexSeconds.ToCharArray();
-                            Array.Reverse(charHexArray);
-                            hexSeconds = new string(charHexArray);
+                            hexSeconds = BigEndToLitEndHex(hexSeconds);
                             ulong milliseconds = ulong.Parse(hexSeconds, System.Globalization.NumberStyles.HexNumber);
                             dbHexString = dbHexString[8..];
                             ReadKeyValue(ref dbHexString, milliseconds);
@@ -79,6 +75,18 @@ namespace codecrafters_redis.src
             }
         }
  
+        private string BigEndToLitEndHex(string hex)
+        {
+            string[] hexArray = new string[hex.Length / 2];
+            for(int i = 0; i < hexArray.Length; i++)
+            {
+                hexArray[i] = hex[i * 2].ToString() + hex[i * 2 + 1].ToString();
+            }
+            Array.Reverse(hexArray);
+            hex = String.Join("", hexArray);
+            return hex;
+        }
+
         private void ReadKeyValue(ref string dbHexString, ulong milliseconds = 0)
         {
             dbHexString = dbHexString[2..];
