@@ -59,7 +59,12 @@ namespace codecrafters_redis.src
 
         public string[] GetAllKeys()
         {
-            return (string[])cache.Keys.ToArray(); // need to rebuild project to gey Keys property
+            object[] keysObj = cache.Keys.ToArray();
+            string[] keysStr = new string[keysObj.Length];
+            if (keysObj.Length != 0)
+                keysStr = Array.ConvertAll(keysObj, x => x.ToString())!;
+
+            return keysStr; // need to rebuild project to gey Keys property
         }
     }
 }
